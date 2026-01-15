@@ -54,19 +54,49 @@ export default function StepFinish() {
     setIsDownloading(true);
     const element = document.getElementById('game-stage');
 
-    // Create a stat overlay for the screenshot
+    // --- UPDATED OVERLAY: Transparent, Text Only ---
     const statOverlay = document.createElement('div');
+    
+    // We remove the background color and border entirely.
+    // We add a text-shadow/stroke so the text is readable over the pixel art.
     statOverlay.innerHTML = `
-      <div style="position:absolute; bottom:10px; right:10px; background:#e6dac3; border:4px solid #3e2723; padding:10px; font-family:'VT323', monospace; color:#3e2723; z-index:9999; text-align:left; box-shadow:4px 4px 0 rgba(0,0,0,0.5);">
-         <div style="border-bottom:2px solid #3e2723; margin-bottom:4px; font-weight:bold; font-size: 20px;">${stats.title}</div>
-         <div style="font-size: 16px;">ROT LEVEL: ${stats.rot}%</div>
-         <div style="font-size: 16px;">COMFORT: ${stats.comfort}%</div>
+      <div style="
+        position: absolute; 
+        top: 20px; 
+        left: 0; 
+        width: 100%; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        z-index: 9999;
+        pointer-events: none;
+      ">
+         <div style="
+            font-family: 'VT323', monospace; 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: #d84315; 
+            text-transform: uppercase; 
+            line-height: 1; 
+            margin-bottom: 2px;
+            text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+         ">${stats.title}</div>
+         
+         <div style="
+            font-family: 'VT323', monospace; 
+            font-size: 12px; 
+            font-weight: bold; 
+            color: #3e2723; 
+            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+         ">
+            ROT: ${stats.rot}%  CMFT: ${stats.comfort}%
+         </div>
       </div>
     `;
     element.appendChild(statOverlay);
 
     try {
-      // Wait for fonts/images to be ready
       await new Promise((r) => setTimeout(r, 250));
 
       const dataUrl = await toPng(element, {
@@ -96,7 +126,6 @@ export default function StepFinish() {
 
   const handleSharePlatform = async (platform) => {
     setIsDownloading(true);
-    // 1. Generate the image first (Always needed for embedding/fallback)
     const dataUrl = await handleDownload();
     if (!dataUrl) {
       setIsDownloading(false);
@@ -105,7 +134,6 @@ export default function StepFinish() {
 
     const shareText = `I reached rank "${stats.title}" with ${stats.rot}% Bed Rot Level. 😴\n\nBuild your cozy setup at Bed Rot Simulator 👇 #BedRotSimulator`;
 
-    // 2. Try Native Web Share (Best for Mobile, embeds image directly)
     try {
       const resp = await fetch(dataUrl);
       const blob = await resp.blob();
@@ -124,9 +152,6 @@ export default function StepFinish() {
       console.log("Native share skip:", err);
     }
 
-    // 3. Desktop Fallback (Direct Intents)
-    // Note: Desktop browsers cannot "inject" images into X/WA intents via URL.
-    // We've already downloaded the image for them as fallback.
     const url = "https://dessert-shop-demo.vercel.app";
 
     if (platform === 'x') {
@@ -141,44 +166,61 @@ export default function StepFinish() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center gap-4 px-4 overflow-y-auto w-full">
-      <h2 className="text-3xl w-full text-center mb-4 text-[#ffe0b2] text-outline font-bold tracking-widest">
-        MISSION COMPLETE
+    <div className="flex flex-col items-center justify-start h-full text-center gap-2 px-2 md:px-4 overflow-y-auto w-full">
+      {/* HEADER */}
+      <h2 className="hidden md:block text-3xl w-full text-center mb-4 text-[#ffe0b2] text-outline font-bold tracking-widest uppercase">
+        Mission Complete
       </h2>
 
-      <div className="bg-[#e6dac3] p-4 border-b-4 border-r-4 border-[#3e2723] w-full max-w-sm mx-auto shadow-lg text-[#3e2723] font-[VT323] text-xl relative">
+      {/* STATS UI (This is the HTML UI, not the download overlay) */}
+      <div className="bg-[#e6dac3] p-2 md:p-4 border-b-4 border-r-4 border-[#3e2723] w-full max-w-md mx-auto shadow-lg text-[#3e2723] font-[VT323] relative shrink-0">
         <div className="absolute top-0 left-0 w-full h-1 bg-[#d7ccc8] opacity-50"></div>
         <div className="absolute left-0 top-0 h-full w-1 bg-[#d7ccc8] opacity-50"></div>
 
-        <p className="border-b border-[#a1887f] pb-2 mb-2 bg-[#d7ccc8] mx-[-1rem] mt-[-1rem] pt-2 font-bold tracking-wider">STATUS REPORT</p>
-
-        <div className="mb-4 text-center">
-          <span className="block text-sm opacity-70">RANK ACHIEVED</span>
-          <span className="text-2xl font-bold text-[#d84315] drop-shadow-sm">{stats.title}</span>
-        </div>
-
-        <div className="flex justify-between items-center mb-2">
-          <span>ROT LEVEL:</span>
-          <div className="w-24 h-4 bg-[#3e2723] p-[2px] relative">
-            <div className="h-full bg-[#8e24aa]" style={{ width: `${stats.rot}%` }}></div>
+        <div className="flex flex-col md:flex-row items-center justify-between md:justify-start gap-3 md:gap-2">
+          
+          {/* Rank Section */}
+          <div className="w-full md:w-auto text-center shrink-0 border-b-2 md:border-b-0 md:border-r border-[#3e2723]/20 pb-2 md:pb-0 md:pr-4 md:mr-2">
+            <span className="block text-xs md:text-sm opacity-70 uppercase leading-none mb-1">Rank Achieved</span>
+            <div className="text-2xl md:text-3xl font-bold text-[#d84315] drop-shadow-sm uppercase leading-none whitespace-nowrap">
+                {stats.title}
+            </div>
           </div>
-        </div>
 
-        <div className="flex justify-between items-center mb-2">
-          <span>COMFORT:</span>
-          <div className="w-24 h-4 bg-[#3e2723] p-[2px]">
-            <div className="h-full bg-[#4caf50]" style={{ width: `${stats.comfort}%` }}></div>
-          </div>
-        </div>
-        <div className="flex justify-between items-center mb-2">
-          <span>SOCIAL:</span>
-          <div className="w-24 h-4 bg-[#3e2723] p-[2px]">
-            <div className="h-full bg-[#f44336]" style={{ width: `${stats.social}%` }}></div>
+          {/* Stats Bars Section */}
+          <div className="flex flex-col w-full gap-2">
+            {/* ROT BAR */}
+            <div className="flex items-center w-full text-lg md:text-lg">
+              <span className="w-12 text-left font-bold mr-2 shrink-0">ROT</span>
+              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
+                <div className="h-full bg-[#8e24aa] transition-all duration-1000" style={{ width: `${stats.rot}%` }}></div>
+              </div>
+              <span className="w-10 text-right font-bold ml-1 text-base">{stats.rot}%</span>
+            </div>
+
+            {/* COMFORT BAR */}
+            <div className="flex items-center w-full text-lg md:text-lg">
+              <span className="w-12 text-left font-bold mr-2 shrink-0">CMFT</span>
+              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
+                <div className="h-full bg-[#4caf50] transition-all duration-1000" style={{ width: `${stats.comfort}%` }}></div>
+              </div>
+              <span className="w-10 text-right font-bold ml-1 text-base">{stats.comfort}%</span>
+            </div>
+
+            {/* SOCIAL BAR */}
+            <div className="flex items-center w-full text-lg md:text-lg">
+              <span className="w-12 text-left font-bold mr-2 shrink-0">SOCL</span>
+              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
+                <div className="h-full bg-[#f44336] transition-all duration-1000" style={{ width: `${stats.social}%` }}></div>
+              </div>
+              <span className="w-10 text-right font-bold ml-1 text-base">{stats.social}%</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-3 mt-4 max-w-xs mx-auto">
+      {/* BUTTONS */}
+      <div className="w-full flex flex-col gap-2 md:gap-3 mt-2 md:mt-4 max-w-xs mx-auto shrink-0 pb-6">
         <button
           onClick={handleDownload}
           disabled={isDownloading}
@@ -206,14 +248,14 @@ export default function StepFinish() {
             <span className="text-xl">💬</span> {isDownloading ? "..." : "WA"}
           </button>
         </div>
+        
+        <button
+            className="mt-2 text-[#a1887f] text-sm md:text-lg hover:text-[#ffe0b2] hover:underline uppercase tracking-wider transition-colors"
+            onClick={() => window.location.reload()}
+        >
+            [ New Bed ]
+        </button>
       </div>
-
-      <button
-        className="mt-6 text-[#a1887f] text-lg hover:text-[#ffe0b2] hover:underline uppercase tracking-wider transition-colors"
-        onClick={() => window.location.reload()}
-      >
-        [ NEW GAME ]
-      </button>
     </div>
   );
 }

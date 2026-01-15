@@ -40,7 +40,7 @@ export default function App() {
     // Initialize Music
     musicRef.current = new Audio('/sounds/music.mp3');
     musicRef.current.loop = true;
-    musicRef.current.volume = 0.3;
+    musicRef.current.volume = 0.4;
 
     return () => {
       if (musicRef.current) {
