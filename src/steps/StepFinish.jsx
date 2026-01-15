@@ -2,10 +2,13 @@ import { useEffect, useState, useMemo } from "react"
 import confetti from "canvas-confetti"
 import { toPng } from "html-to-image"
 import { useStepStore } from "../store/stepStore"
+import useSound from "../utils/useSound"
 
 export default function StepFinish() {
   const [isDownloading, setIsDownloading] = useState(false);
   const { selectedBase, selectedFlavors, selectedToppings, selectedDecoration, selectedScene } = useStepStore();
+
+  const [playFinal] = useSound('/sounds/final.wav', { volume: 0.5 });
 
   // Dynamic Score Calculation
   const stats = useMemo(() => {
@@ -38,13 +41,14 @@ export default function StepFinish() {
   }, [selectedBase, selectedFlavors, selectedToppings, selectedDecoration, selectedScene]);
 
   useEffect(() => {
+    playFinal();
     confetti({
       particleCount: 150,
       spread: 100,
       origin: { y: 0.6 },
       colors: ['#3e2723', '#8d6e63', '#ffe0b2', '#795548']
     });
-  }, []);
+  }, [playFinal]);
 
   const handleDownload = async () => {
     setIsDownloading(true);

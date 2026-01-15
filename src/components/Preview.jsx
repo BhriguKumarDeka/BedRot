@@ -106,10 +106,10 @@ export default function Preview({ id, isFullScreen = false }) {
       />
 
       {/* 2. THE BED CONTAINER - Centered & Large */}
-      <div className={`absolute inset-0 m-auto flex items-center justify-center transition-transform duration-500 ${isFullScreen ? "scale-[0.55] md:scale-100 translate-y-0" : "scale-90"}`}>
+      <div className={`absolute inset-0 m-auto flex items-center justify-center transition-transform duration-500 ${isFullScreen ? "scale-[0.75] md:scale-[1.15] translate-y-2" : "scale-95"}`}>
 
         {/* WRAPPER: Limits items to strictly stay within the Bed's box */}
-        <div ref={constraintsRef} className="relative w-[340px] h-[450px] md:w-[600px] md:h-[750px]">
+        <div ref={constraintsRef} className="relative w-[360px] h-[480px] md:w-[650px] md:h-[820px]">
 
           {/* BED IMAGE (Base) */}
           {selectedBase ? (
@@ -119,7 +119,7 @@ export default function Preview({ id, isFullScreen = false }) {
               className={`w-full h-full object-contain z-10 ${harshShadow}`}
             />
           ) : (
-            <div className="w-full h-full bg-[#f0f0f0] border-4 border-dashed border-slate-500 flex items-center justify-center text-slate-500 font-bold z-10 tracking-widest text-xl">
+            <div className="w-1/2 h-1/2 mt-30 md:mt-50  mx-auto bg-[#f0f0f0]/50 border-4 border-dashed border-slate-500 flex items-center justify-center text-slate-500 font-bold z-10 tracking-widest text-xl">
               [INSERT BED]
             </div>
           )}

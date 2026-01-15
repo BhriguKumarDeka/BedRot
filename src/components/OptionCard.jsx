@@ -1,11 +1,20 @@
+import useSound from "../utils/useSound";
+
 export default function OptionCard({ image, label, isSelected, onClick, imageClass = "" }) {
+  const [playSelect] = useSound('/sounds/select.wav', { volume: 0.4 });
+
+  const handleClick = (e) => {
+    playSelect();
+    if (onClick) onClick(e);
+  };
+
   return (
     <button
       className={`relative flex flex-col items-center justify-center p-2 transition-all duration-100 rpg-btn min-h-[100px] w-full ${isSelected
         ? "rpg-btn-selected transform translate-y-[1px]"
         : ""
         }`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="relative w-12 h-12 md:w-16 md:h-16 mb-2 shrink-0 flex items-center justify-center">
         <img

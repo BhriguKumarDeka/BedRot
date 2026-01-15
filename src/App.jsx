@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useStepStore } from './store/stepStore'
 import { motion, AnimatePresence } from 'framer-motion'
 import useSound from './utils/useSound'
@@ -28,11 +28,49 @@ export default function App() {
   const { stepIndex, goToStep } = useStepStore()
   const [hasEntered, setHasEntered] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const activeStep = steps[stepIndex]
 
-  // Sound effects
+  // Music & Sound effects
+  const musicRef = useRef(null);
   const [playClick] = useSound('/sounds/click.wav', { volume: 0.5 });
   const [playPage] = useSound('/sounds/page.wav', { volume: 0.4 });
+
+  useEffect(() => {
+    // Initialize Music
+    musicRef.current = new Audio('/sounds/music.mp3');
+    musicRef.current.loop = true;
+    musicRef.current.volume = 0.3;
+
+    return () => {
+      if (musicRef.current) {
+        musicRef.current.pause();
+        musicRef.current = null;
+      }
+    }
+  }, []);
+
+  // Sync mute state with audio element
+  useEffect(() => {
+    if (musicRef.current) {
+      musicRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  const handleEnter = () => {
+    playClick();
+    setHasEntered(true);
+    setShowOnboarding(true);
+
+    // Start background music loop
+    if (musicRef.current) {
+      musicRef.current.play().catch(err => console.log("Music blocked:", err));
+    }
+  }
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  }
 
   const handleNav = (index) => {
     playPage();
@@ -40,11 +78,7 @@ export default function App() {
   }
 
   if (!hasEntered) {
-    return <LandingPage onEnter={() => {
-      playClick();
-      setHasEntered(true);
-      setShowOnboarding(true);
-    }} />
+    return <LandingPage onEnter={handleEnter} />
   }
 
   return (
@@ -68,6 +102,14 @@ export default function App() {
           LOCATION: BEDROOM <br />
           TIME: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
+
+        {/* Music Toggle */}
+        <button
+          onClick={toggleMute}
+          className="absolute top-4 right-4 z-[60] bg-[#3e2723] border-2 border-[#ffb74d] text-[#ffb74d] px-3 py-1 text-xl hover:scale-110 transition-transform shadow-[4px_4px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
+        >
+          {isMuted ? "🔈 OFF" : "🔊 ON"}
+        </button>
       </div>
 
       {/* SECTION 2: CONTROLS (Bottom 60% Mobile, Right 40% Desktop) */}
