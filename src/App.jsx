@@ -125,7 +125,9 @@ export default function App() {
           <Preview isFullScreen={true} />
 
           {stepIndex === 6 && (
-            <div className="absolute top-4 left-4 z-50 bg-[#e6dac3] border-4 border-[#3e2723] p-3 shadow-[8px_8px_0_rgba(0,0,0,0.3)] pointer-events-none transition-all duration-500 animate-in fade-in slide-in-from-left-4">
+            <div
+              className="absolute top-4 left-4 z-50 bg-[#e6dac3] border-4 border-[#3e2723] p-3 shadow-[8px_8px_0_rgba(0,0,0,0.3)] pointer-events-none transition-all duration-500 animate-in fade-in slide-in-from-left-4 hidden md:block"
+            >
               <div className="text-[#d84315] font-bold text-2xl uppercase border-b-2 border-[#3e2723] mb-1 leading-none pb-1 whitespace-nowrap">
                 {stats.title}
               </div>

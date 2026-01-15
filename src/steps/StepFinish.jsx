@@ -123,11 +123,11 @@ export default function StepFinish() {
 
   return (
     <div className="flex flex-col items-center justify-start h-full text-center gap-2 px-2 md:px-4 overflow-y-auto w-full">
-      <h2 className="hidden md:block text-3xl w-full text-center mb-0 mt-4 text-[#ffe0b2] text-outline font-bold tracking-widest uppercase">
+      <h2 className="hidden md:block text-3xl w-full text-center mb-0 mt-4 text-[#b66d00] text-outline font-bold tracking-widest uppercase">
         Mission Complete
       </h2>
 
-      <div className="flex flex-col gap-2 text-[#ffe0b2] mb-2">
+      <div className="flex flex-col gap-2 text-[#b66d00] mb-2">
         <p className="text-xl opacity-90">Sleep well, decomposition expert.</p>
       </div>
 
