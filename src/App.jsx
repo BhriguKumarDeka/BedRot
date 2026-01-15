@@ -25,11 +25,28 @@ const steps = [
 ]
 
 export default function App() {
-  const { stepIndex, goToStep, selectedBase } = useStepStore()
+  const { stepIndex, goToStep, selectedBase, selectedFlavors, selectedToppings, selectedDecoration, selectedScene } = useStepStore()
   const [hasEntered, setHasEntered] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const activeStep = steps[stepIndex]
+
+  const stats = (() => {
+    let comfort = 0;
+    let rotLevel = 0;
+    if (selectedBase) comfort += 20;
+    if (selectedScene) comfort += 10;
+    if (selectedDecoration) comfort += 15;
+    comfort += selectedFlavors.length * 10;
+    rotLevel += selectedToppings.length * 15;
+    const finalRot = Math.min(100, Math.max(0, 20 + rotLevel + (selectedBase ? 10 : 0)));
+    const finalComfort = Math.min(100, Math.max(0, 50 + comfort));
+    let title = "NOVICE NAPPER";
+    if (finalRot > 40) title = "WEEKEND WARRIOR";
+    if (finalRot > 70) title = "DECOMPOSITION EXPERT";
+    if (finalRot > 90) title = "ONE WITH THE OOZE";
+    return { title, rot: finalRot, comfort: finalComfort };
+  })();
 
   const musicRef = useRef(null);
   const [playClick] = useSound('/sounds/click.wav', { volume: 0.5 });
@@ -104,14 +121,28 @@ export default function App() {
 
         <div className="absolute inset-0 pointer-events-none z-50 opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
 
-        <div className="relative z-10 w-full h-full flex items-center justify-center">
-          <Preview id="game-stage" isFullScreen={true} />
+        <div id="capture-zone" className="relative z-10 w-full h-full flex items-center justify-center">
+          <Preview isFullScreen={true} />
+
+          {stepIndex === 6 && (
+            <div className="absolute top-4 left-4 z-50 bg-[#e6dac3] border-4 border-[#3e2723] p-3 shadow-[8px_8px_0_rgba(0,0,0,0.3)] pointer-events-none transition-all duration-500 animate-in fade-in slide-in-from-left-4">
+              <div className="text-[#d84315] font-bold text-2xl uppercase border-b-2 border-[#3e2723] mb-1 leading-none pb-1 whitespace-nowrap">
+                {stats.title}
+              </div>
+              <div className="text-[#3e2723] font-bold text-lg flex flex-col pt-1">
+                <span>ROT LEVEL: {stats.rot}%</span>
+                <span>COMFORT: {stats.comfort}%</span>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="absolute top-4 left-4 text-[#ffecb3] text-xl opacity-80 text-outline tracking-widest hidden md:block">
-          LOCATION: BEDROOM <br />
-          TIME: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-        </div>
+        {stepIndex !== 6 && (
+          <div className="absolute top-4 left-4 text-[#ffecb3] text-xl opacity-80 text-outline tracking-widest hidden md:block">
+            LOCATION: BEDROOM <br />
+            TIME: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        )}
 
         <button
           onClick={toggleMute}

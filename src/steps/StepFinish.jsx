@@ -51,50 +51,9 @@ export default function StepFinish() {
   }, [playFinal]);
 
   const handleDownload = async () => {
+    const element = document.getElementById('capture-zone');
+    if (!element) return;
     setIsDownloading(true);
-    const element = document.getElementById('game-stage');
-
-
-    const statOverlay = document.createElement('div');
-    
-
-
-    statOverlay.innerHTML = `
-      <div style="
-        position: absolute; 
-        top: 20px; 
-        left: 0; 
-        width: 100%; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        justify-content: center; 
-        z-index: 9999;
-        pointer-events: none;
-      ">
-         <div style="
-            font-family: 'VT323', monospace; 
-            font-size: 20px; 
-            font-weight: bold; 
-            color: #d84315; 
-            text-transform: uppercase; 
-            line-height: 1; 
-            margin-bottom: 2px;
-            text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
-         ">${stats.title}</div>
-         
-         <div style="
-            font-family: 'VT323', monospace; 
-            font-size: 12px; 
-            font-weight: bold; 
-            color: #3e2723; 
-            text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
-         ">
-            ROT: ${stats.rot}%  CMFT: ${stats.comfort}%
-         </div>
-      </div>
-    `;
-    element.appendChild(statOverlay);
 
     try {
       await new Promise((r) => setTimeout(r, 250));
@@ -102,11 +61,9 @@ export default function StepFinish() {
       const dataUrl = await toPng(element, {
         cacheBust: true,
         pixelRatio: 2,
-        quality: 0.95,
-        backgroundColor: '#2d2a2e'
+        quality: 1.0,
+        backgroundColor: '#20152a'
       });
-
-      element.removeChild(statOverlay);
 
       const link = document.createElement('a');
       link.download = `bed-rot-sim-${Date.now()}.png`;
@@ -116,7 +73,6 @@ export default function StepFinish() {
 
     } catch (err) {
       console.error(err);
-      if (element.contains(statOverlay)) element.removeChild(statOverlay);
       alert("Could not create image :(");
       return null;
     } finally {
@@ -167,49 +123,12 @@ export default function StepFinish() {
 
   return (
     <div className="flex flex-col items-center justify-start h-full text-center gap-2 px-2 md:px-4 overflow-y-auto w-full">
-      <h2 className="hidden md:block text-3xl w-full text-center mb-4 text-[#ffe0b2] text-outline font-bold tracking-widest uppercase">
+      <h2 className="hidden md:block text-3xl w-full text-center mb-0 mt-4 text-[#ffe0b2] text-outline font-bold tracking-widest uppercase">
         Mission Complete
       </h2>
 
-      <div className="bg-[#e6dac3] p-2 md:p-4 border-b-4 border-r-4 border-[#3e2723] w-full max-w-md mx-auto shadow-lg text-[#3e2723] font-[VT323] relative shrink-0">
-        <div className="absolute top-0 left-0 w-full h-1 bg-[#d7ccc8] opacity-50"></div>
-        <div className="absolute left-0 top-0 h-full w-1 bg-[#d7ccc8] opacity-50"></div>
-
-        <div className="flex flex-col md:flex-row items-center justify-between md:justify-start gap-3 md:gap-2">
-          
-          <div className="w-full md:w-auto text-center shrink-0 border-b-2 md:border-b-0 md:border-r border-[#3e2723]/20 pb-2 md:pb-0 md:pr-4 md:mr-2">
-            <span className="block text-xs md:text-sm opacity-70 uppercase leading-none mb-1">Rank Achieved</span>
-            <div className="text-2xl md:text-3xl font-bold text-[#d84315] drop-shadow-sm uppercase leading-none whitespace-nowrap">
-                {stats.title}
-            </div>
-          </div>
-
-          <div className="flex flex-col w-full gap-2">
-            <div className="flex items-center w-full text-lg md:text-lg">
-              <span className="w-12 text-left font-bold mr-2 shrink-0">ROT</span>
-              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
-                <div className="h-full bg-[#8e24aa] transition-all duration-1000" style={{ width: `${stats.rot}%` }}></div>
-              </div>
-              <span className="w-10 text-right font-bold ml-1 text-base">{stats.rot}%</span>
-            </div>
-
-            <div className="flex items-center w-full text-lg md:text-lg">
-              <span className="w-12 text-left font-bold mr-2 shrink-0">CMFT</span>
-              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
-                <div className="h-full bg-[#4caf50] transition-all duration-1000" style={{ width: `${stats.comfort}%` }}></div>
-              </div>
-              <span className="w-10 text-right font-bold ml-1 text-base">{stats.comfort}%</span>
-            </div>
-
-            <div className="flex items-center w-full text-lg md:text-lg">
-              <span className="w-12 text-left font-bold mr-2 shrink-0">SOCL</span>
-              <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
-                <div className="h-full bg-[#f44336] transition-all duration-1000" style={{ width: `${stats.social}%` }}></div>
-              </div>
-              <span className="w-10 text-right font-bold ml-1 text-base">{stats.social}%</span>
-            </div>
-          </div>
-        </div>
+      <div className="flex flex-col gap-2 text-[#ffe0b2] mb-2">
+        <p className="text-xl opacity-90">Sleep well, decomposition expert.</p>
       </div>
 
       <div className="w-full flex flex-col gap-2 md:gap-3 mt-2 md:mt-4 max-w-xs mx-auto shrink-0 pb-6">
@@ -240,12 +159,12 @@ export default function StepFinish() {
             <span className="text-xl">💬</span> {isDownloading ? "..." : "WA"}
           </button>
         </div>
-        
+
         <button
-            className="mt-2 text-[#a1887f] text-sm md:text-lg hover:text-[#ffe0b2] hover:underline uppercase tracking-wider transition-colors"
-            onClick={() => window.location.reload()}
+          className="mt-2 text-[#a1887f] text-sm md:text-lg hover:text-[#ffe0b2] hover:underline uppercase tracking-wider transition-colors"
+          onClick={() => window.location.reload()}
         >
-            [ New Bed ]
+          [ New Bed ]
         </button>
       </div>
     </div>
