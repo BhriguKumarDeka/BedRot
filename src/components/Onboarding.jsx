@@ -42,14 +42,20 @@ export default function Onboarding({ onComplete }) {
       exit={{ opacity: 0 }}
       className="absolute inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
     >
-      {/* 1. PERSISTENT PANEL (Stable) */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.8, opacity: 0, y: 20 }}
         className="rpg-panel bg-[#e6dac3] border-4 border-[#5d4037] p-1 shadow-2xl max-w-md w-full relative overflow-hidden"
       >
-        {/* Decorative CRT Scanline styling on the box */}
+        <button
+          onClick={onComplete}
+          className="absolute top-2 right-2 z-20 w-8 h-8 flex items-center justify-center bg-[#5d4037] text-[#ffe0b2] hover:bg-[#3e2723] transition-colors border-2 border-[#3e2723] shadow-[2px_2px_0px_rgba(0,0,0,0.3)]"
+          title="Skip Tutorial"
+        >
+          ✕
+        </button>
+
         <div className="border-2 border-[#5d4037] p-6 h-full flex flex-col items-center text-center relative z-10">
 
           <AnimatePresence mode="wait">
@@ -97,7 +103,6 @@ export default function Onboarding({ onComplete }) {
           </div>
         </div>
 
-        {/* Subtle scanline overlay to match the vibe */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]"></div>
       </motion.div>
     </motion.div>

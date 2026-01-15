@@ -10,7 +10,7 @@ export default function StepFinish() {
 
   const [playFinal] = useSound('/sounds/final.wav', { volume: 0.5 });
 
-  // Dynamic Score Calculation
+
   const stats = useMemo(() => {
     let comfort = 0;
     let social = 0;
@@ -20,14 +20,14 @@ export default function StepFinish() {
     if (selectedScene) comfort += 10;
     if (selectedDecoration) comfort += 15;
 
-    // Tech increases comfort but kills social
+
     comfort += selectedFlavors.length * 10;
     social -= selectedFlavors.length * 10;
 
-    // Snacks increase rot level
+
     rotLevel += selectedToppings.length * 15;
 
-    // Base Calculations
+
     const finalComfort = Math.min(100, Math.max(0, 50 + comfort));
     const finalSocial = Math.min(100, Math.max(0, 50 + social));
     const finalRot = Math.min(100, Math.max(0, 20 + rotLevel + (selectedBase ? 10 : 0)));
@@ -54,11 +54,11 @@ export default function StepFinish() {
     setIsDownloading(true);
     const element = document.getElementById('game-stage');
 
-    // --- UPDATED OVERLAY: Transparent, Text Only ---
+
     const statOverlay = document.createElement('div');
     
-    // We remove the background color and border entirely.
-    // We add a text-shadow/stroke so the text is readable over the pixel art.
+
+
     statOverlay.innerHTML = `
       <div style="
         position: absolute; 
@@ -167,19 +167,16 @@ export default function StepFinish() {
 
   return (
     <div className="flex flex-col items-center justify-start h-full text-center gap-2 px-2 md:px-4 overflow-y-auto w-full">
-      {/* HEADER */}
       <h2 className="hidden md:block text-3xl w-full text-center mb-4 text-[#ffe0b2] text-outline font-bold tracking-widest uppercase">
         Mission Complete
       </h2>
 
-      {/* STATS UI (This is the HTML UI, not the download overlay) */}
       <div className="bg-[#e6dac3] p-2 md:p-4 border-b-4 border-r-4 border-[#3e2723] w-full max-w-md mx-auto shadow-lg text-[#3e2723] font-[VT323] relative shrink-0">
         <div className="absolute top-0 left-0 w-full h-1 bg-[#d7ccc8] opacity-50"></div>
         <div className="absolute left-0 top-0 h-full w-1 bg-[#d7ccc8] opacity-50"></div>
 
         <div className="flex flex-col md:flex-row items-center justify-between md:justify-start gap-3 md:gap-2">
           
-          {/* Rank Section */}
           <div className="w-full md:w-auto text-center shrink-0 border-b-2 md:border-b-0 md:border-r border-[#3e2723]/20 pb-2 md:pb-0 md:pr-4 md:mr-2">
             <span className="block text-xs md:text-sm opacity-70 uppercase leading-none mb-1">Rank Achieved</span>
             <div className="text-2xl md:text-3xl font-bold text-[#d84315] drop-shadow-sm uppercase leading-none whitespace-nowrap">
@@ -187,9 +184,7 @@ export default function StepFinish() {
             </div>
           </div>
 
-          {/* Stats Bars Section */}
           <div className="flex flex-col w-full gap-2">
-            {/* ROT BAR */}
             <div className="flex items-center w-full text-lg md:text-lg">
               <span className="w-12 text-left font-bold mr-2 shrink-0">ROT</span>
               <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
@@ -198,7 +193,6 @@ export default function StepFinish() {
               <span className="w-10 text-right font-bold ml-1 text-base">{stats.rot}%</span>
             </div>
 
-            {/* COMFORT BAR */}
             <div className="flex items-center w-full text-lg md:text-lg">
               <span className="w-12 text-left font-bold mr-2 shrink-0">CMFT</span>
               <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
@@ -207,7 +201,6 @@ export default function StepFinish() {
               <span className="w-10 text-right font-bold ml-1 text-base">{stats.comfort}%</span>
             </div>
 
-            {/* SOCIAL BAR */}
             <div className="flex items-center w-full text-lg md:text-lg">
               <span className="w-12 text-left font-bold mr-2 shrink-0">SOCL</span>
               <div className="flex-1 h-4 md:h-5 bg-[#3e2723] p-[2px] relative">
@@ -219,7 +212,6 @@ export default function StepFinish() {
         </div>
       </div>
 
-      {/* BUTTONS */}
       <div className="w-full flex flex-col gap-2 md:gap-3 mt-2 md:mt-4 max-w-xs mx-auto shrink-0 pb-6">
         <button
           onClick={handleDownload}

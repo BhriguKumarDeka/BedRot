@@ -5,7 +5,10 @@ const options = [
   { name: 'Squishmallow', image: '/ingredients/decorations/squishmallow.png' },
   { name: 'Tissues', image: '/ingredients/decorations/tissues.png' },
   { name: 'Headphones', image: '/ingredients/decorations/headphones.png' },
-  { name: 'Eye Mask', image: '/ingredients/decorations/eye_mask.png' }
+  { name: 'Eye Mask', image: '/ingredients/decorations/eye_mask.png' },
+  { name: 'Mandrake Toy', image: '/ingredients/decorations/mandrake_toy.png' },
+  { name: 'Voodoo Doll', image: '/ingredients/decorations/voodoo_doll.png' },
+  { name: 'Skull', image: '/ingredients/decorations/skull.png' },
 ]
 
 export default function StepDecorate() {

@@ -5,7 +5,10 @@ const baseOptions = [
   {name: 'White Messy', image: '/ingredients/base/white_messy.png'},
   {name: 'Green Plaid', image: '/ingredients/base/plaid_green.png'},
   {name: 'Pink Ruffles', image: '/ingredients/base/pink_ruffles.png'},
-  {name: 'Dark Grey', image: '/ingredients/base/dark_grey.png'}
+  {name: 'Dark Grey', image: '/ingredients/base/dark_grey.png'},
+  {name: 'Hogwarts', image: '/ingredients/base/hogwarts.png'},
+  {name: 'Gryffindor', image: '/ingredients/base/gryffindor_bed.png'},
+  {name: 'Summoning Bed', image: '/ingredients/base/summoning_bed.png'}
 ]
 
 export default function StepBase() {

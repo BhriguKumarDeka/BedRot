@@ -7,7 +7,8 @@ const options = [
   {name: 'Chips', image: '/ingredients/toppings/chips_bag.png'},
   {name: 'Diet Coke', image: '/ingredients/toppings/diet_coke.png'},
   {name: 'Pizza', image: '/ingredients/toppings/pizza_box.png'},
-  {name: 'Energy Drink', image: '/ingredients/toppings/energy_drink.png'}
+  {name: 'Energy Drink', image: '/ingredients/toppings/energy_drink.png'}, 
+  { name: 'Chocolate Frog', image: '/ingredients/toppings/chocolate_frog.png' }
 ]
 
 export default function StepToppings() {

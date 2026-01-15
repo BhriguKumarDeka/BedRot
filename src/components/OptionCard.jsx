@@ -30,7 +30,6 @@ export default function OptionCard({ image, label, isSelected, onClick, imageCla
         {label}
       </span>
 
-      {/* Selected Indicator (Pixel Hand or icon) */}
       {isSelected && (
         <div className="absolute top-1 right-1 text-[#3e2723] text-lg md:text-xl font-bold leading-none animate-bounce">
           ▼

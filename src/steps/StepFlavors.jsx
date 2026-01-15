@@ -6,6 +6,10 @@ const options = [
   { name: 'Switch', image: '/ingredients/flavors/switch.png'},
   { name: 'Kindle', image: '/ingredients/flavors/kindle.png'},
   { name: 'Sleeping Cat', image: '/ingredients/flavors/cat_sleeping.png'},
+  { name: 'Key Chain', image: '/ingredients/flavors/keychain.png' },
+  { name: 'Mischief Map', image: '/ingredients/flavors/mischief_map.png' },
+  { name: 'Crystal Ball', image: '/ingredients/flavors/crystal_ball.png' }, 
+  { name: 'Blood Dagger', image: '/ingredients/flavors/blood_dagger.png' }
 ]
 
 export default function StepFlavors() {

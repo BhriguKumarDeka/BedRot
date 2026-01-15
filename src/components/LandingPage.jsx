@@ -12,20 +12,15 @@ export default function LandingPage({ onEnter }) {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-[#20152a] text-[#f0f0f0] relative overflow-hidden font-[VT323]">
 
-      {/* 1. LAYERED SCENE BACKGROUND */}
       <motion.div className="absolute inset-0 z-0 flex items-center justify-center">
-        {/* Simple gradient sky */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#2c2137] to-[#4a3b59]"></div>
 
-        {/* Floating Elements (Game Sprites) */}
-        {/* Main Bed Item closer to center */}
         <motion.img
           initial={{ y: 0 }} animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
           src="/ingredients/base/white_messy.png"
           className="absolute z-0 w-[80%] max-w-[500px] opacity-20 drop-shadow-2xl grayscale brightness-50"
         />
 
-        {/* Floating Decor Items - WIDER ORBITS and BETTER POSITIONING */}
         <motion.img
           initial={{ x: -100, y: -50, rotate: -15 }}
           animate={{ x: [-100, -120, -100], y: [-50, -70, -50], rotate: [-15, -10, -15] }}
@@ -51,7 +46,6 @@ export default function LandingPage({ onEnter }) {
           src="/ingredients/toppings/iced_coffee.png" className="absolute top-[25%] right-[15%] w-24 md:w-32 opacity-40 drop-shadow-xl"
         />
 
-        {/* Extra Background Particles for Depth */}
         <div className="absolute top-[10%] left-[50%] w-4 h-4 bg-[#ffb74d] opacity-20 animate-ping"></div>
         <div className="absolute bottom-[10%] left-[20%] w-3 h-3 bg-[#ffb74d] opacity-20 animate-pulse"></div>
         <div className="absolute top-[30%] right-[10%] w-2 h-2 bg-[#ffb74d] opacity-30 animate-bounce"></div>
@@ -59,14 +53,12 @@ export default function LandingPage({ onEnter }) {
         <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#ffb74d] rounded-full blur-[150px] opacity-10"></div>
       </motion.div>
 
-      {/* 2. TITLE SCREEN UI - Explicitly separate from background layer */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
         className="z-10 text-center relative p-8 border-4 border-[#5d4037] bg-[#e6dac3] shadow-[0_0_0_4px_#3e2723,0_0_50px_rgba(0,0,0,0.5)] max-w-xl w-[90%]"
       >
-        {/* Decorative Corner Pixel Screws */}
         <div className="absolute top-2 left-2 w-3 h-3 bg-[#3e2723] shadow-[inset_1px_1px_0_rgba(255,255,255,0.3)]"></div>
         <div className="absolute top-2 right-2 w-3 h-3 bg-[#3e2723] shadow-[inset_1px_1px_0_rgba(255,255,255,0.3)]"></div>
         <div className="absolute bottom-2 left-2 w-3 h-3 bg-[#3e2723] shadow-[inset_1px_1px_0_rgba(255,255,255,0.3)]"></div>
@@ -107,7 +99,7 @@ export default function LandingPage({ onEnter }) {
           </div>
 
           <p className="text-[#8d6e63] mt-8 text-sm uppercase tracking-widest">
-            v1.0.2 // COZY EDITION
+            v1.0.2
           </p>
 
           <div className="mt-4 opacity-80 hover:opacity-100 transition-opacity">

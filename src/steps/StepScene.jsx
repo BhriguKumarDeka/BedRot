@@ -5,7 +5,10 @@ const scenes = [
   {name: "Daylight", image: '/backgrounds/day.png'},
   {name: "Rainy Mood", image: '/backgrounds/rain.png'},
   {name: "3 AM Night", image: '/backgrounds/night.png'},
-  {name: "Golden Hour", image: '/backgrounds/golden.png'}
+  {name: "Golden Hour", image: '/backgrounds/golden.png'},
+  {name: "Dusk Vibes", image: '/backgrounds/dusk.png'},
+  {name: "Gryffindor", image: '/backgrounds/gryffindor.png'},
+  {name: "Void", image: '/backgrounds/void.png'},
 ]
 
 export default function StepScene() {
