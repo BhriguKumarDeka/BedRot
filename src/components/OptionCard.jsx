@@ -1,18 +1,32 @@
 export default function OptionCard({ image, label, isSelected, onClick }) {
   return (
-    <div
-      className={`rounded-2xl border-4 p-2 cursor-pointer transition-all duration-200 ${
-        isSelected ? "border-pink-500 scale-105" : "border-transparent hover:border-pink-300"
-      }`}
+    <button
+      className={`relative flex flex-col items-center justify-center p-2 transition-all duration-100 rpg-btn ${isSelected
+          ? "rpg-btn-selected transform translate-y-[1px]"
+          : ""
+        }`}
       onClick={onClick}
     >
-      <img
-        src={image}
-        alt={label}
-        className="w-24 h-24 object-contain mx-auto drop-shadow"
-      />
-      <p className="text-center text-sm font-medium">{label}</p>
-    </div>
-  )
-}
+      <div className="relative w-16 h-16 mb-2">
+        <img
+          src={image}
+          alt={label}
+          className={`w-full h-full object-contain filter drop-shadow-[2px_2px_0px_rgba(0,0,0,0.4)] ${isSelected ? "scale-105" : "group-hover:scale-105"
+            }`}
+        />
+      </div>
+      <span
+        className={`text-lg font-bold uppercase tracking-widest text-[#ffe0b2] text-outline`}
+      >
+        {label}
+      </span>
 
+      {/* Selected Indicator (Pixel Hand or icon) */}
+      {isSelected && (
+        <div className="absolute top-1 right-1 text-[#3e2723] text-xl font-bold leading-none animate-bounce">
+          ▼
+        </div>
+      )}
+    </button>
+  );
+}

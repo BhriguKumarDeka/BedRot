@@ -1,46 +1,25 @@
 import { useStepStore } from "../store/stepStore"
 import OptionCard from "../components/OptionCard"
 
-const flavorOptions = [
-  { name: 'Vanilla', image: '/ingredients/flavors/vanilla.png'},
-  { name: 'Chocolate', image: '/ingredients/flavors/chocolate.png'},
-  { name: 'Stawberry', image: '/ingredients/flavors/strawberry.png'},
-  { name: 'Butterscotch', image: '/ingredients/flavors/butterscotch.png'},
-  { name: 'Mango', image: '/ingredients/flavors/mango.png'},
+const options = [
+  { name: 'MacBook', image: '/ingredients/flavors/macbook.png'},
+  { name: 'Switch', image: '/ingredients/flavors/switch.png'},
+  { name: 'Kindle', image: '/ingredients/flavors/kindle.png'},
+  { name: 'Sleeping Cat', image: '/ingredients/flavors/cat_sleeping.png'},
 ]
 
 export default function StepFlavors() {
   const { selectedFlavors, addFlavor, removeFlavor} = useStepStore()
-
-  const toggleFlavor = (flavor) => {
-    if(selectedFlavors.includes(flavor)){
-      removeFlavor(flavor)
-    } else {
-      addFlavor(flavor)
-    }
-  }
+  const toggle = (f) => selectedFlavors.includes(f) ? removeFlavor(f) : addFlavor(f)
 
   return (
-    <div className="w-full max-w-4xl text-center">
-      <h1 className="text-3xl font-bold mb-6">Step 2: Choose your Flavors 🍓🍫 </h1>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-center">
-        {flavorOptions.map((item)=> (
-          <OptionCard
-            key={item.name}
-            image = {item.image}
-            label={item.name}
-            isSelected={selectedFlavors.includes(item.name)}
-            onClick={()=> toggleFlavor(item.name)}
-          />
+    <div className="flex flex-col h-full">
+      <h3 className="text-slate-500 font-bold mb-3 text-sm uppercase tracking-wider">Essentials (Max 3)</h3>
+      <div className="grid grid-cols-2 gap-3 pb-4">
+        {options.map((item)=> (
+          <OptionCard key={item.name} image={item.image} label={item.name} isSelected={selectedFlavors.includes(item.name)} onClick={()=> toggle(item.name)}/>
         ))}
       </div>
-      {selectedFlavors.length > 0 && (
-        <div className="mt-6 text-xl">
-          Selected Flavors: <strong>{selectedFlavors.join(',')}</strong>
-        </div>
-      )}
-
     </div>
   )
 }
