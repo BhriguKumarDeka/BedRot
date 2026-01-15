@@ -110,8 +110,12 @@ export default function LandingPage({ onEnter }) {
             v1.0.2 // COZY EDITION
           </p>
 
-          <div className="mt-2 opacity-80 hover:opacity-100 transition-opacity">
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdessert-shop-demo.vercel.app&count_bg=%235D4037&title_bg=%232C2137&icon=&icon_color=%23E7E7E7&title=VISITORS&edge_flat=true" alt="Visitor Count" />
+          <div className="mt-4 opacity-80 hover:opacity-100 transition-opacity">
+            <img
+              src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fbed-rot-sim. vercel.app&label=VISITORS&labelColor=%235d4037&countColor=%233e2723&style=flat-square"
+              alt="Visitor Count"
+              className="h-6"
+            />
           </div>
         </div>
       </motion.div>
