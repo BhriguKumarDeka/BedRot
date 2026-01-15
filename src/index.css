@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: "VT323", monospace;
+  background-color: #2c2137; /* Deep cozy purple/brown */
+  color: #5d4037;
+  image-rendering: pixelated;
+  /* Dither pattern generic */
+  background-image: radial-gradient(#4a3b59 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 14px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #46344e;
+  border-left: 2px solid #20152a;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4b483;
+  border: 2px solid #fff;
+  border-right-color: #8c7350;
+  border-bottom-color: #8c7350;
+}
+
+/* --- RPG UI THEME --- */
+
+/* 1. The Main "Paper/Parchment" Container */
+.rpg-panel {
+  background-color: #e6dac3; /* Parchment */
+  border: 4px solid #5d4037;
+  box-shadow: inset 2px 2px 0px #fff, inset -2px -2px 0px #bcaaa4,
+    4px 4px 0px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+/* 2. The Title Bar / Header */
+.rpg-header {
+  background-color: #3e2723;
+  color: #ffecb3;
+  padding: 4px 12px;
+  border: 2px solid #20152a;
+  border-bottom: none;
+  box-shadow: inset 2px 2px 0px #5d4037, inset -2px -2px 0px #000;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0px #000;
+}
+
+/* 3. Buttons (Cozy Bevels) */
+.rpg-btn {
+  background-color: #8d6e63;
+  color: #fff;
+  border: 2px solid #3e2723;
+  border-top-color: #d7ccc8;
+  border-left-color: #d7ccc8;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s;
+  cursor: pointer;
+}
+.rpg-btn:hover {
+  background-color: #a1887f;
+  transform: translateY(-1px);
+}
+.rpg-btn:active {
+  background-color: #6d4c41;
+  border-top-color: #3e2723;
+  border-left-color: #3e2723;
+  border-bottom-color: #d7ccc8;
+  border-right-color: #d7ccc8;
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Selected State for Items */
+.rpg-btn-selected {
+  background-color: #ffb74d !important; /* Golden Orange */
+  color: #3e2723 !important;
+  border-color: #e65100 !important;
+  box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Helper for Text Shadow */
+.text-outline {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}

@@ -2,48 +2,24 @@ import { useStepStore } from "../store/stepStore"
 import OptionCard from "../components/OptionCard"
 
 const scenes = [
-  {name: "Pastel Sky", image: '/backgrounds/pastel_sky.png'},
-  {name: "Table", image: '/backgrounds/table.png'},
-  {name: "Galaxy", image: '/backgrounds/galaxy.png'},
-  {name: "Sunny Day", image: '/backgrounds/sunny_day.png'},
-  {name: "Clouds", image: '/backgrounds/clouds.png'}
+  {name: "Daylight", image: '/backgrounds/day.png'},
+  {name: "Rainy Mood", image: '/backgrounds/rain.png'},
+  {name: "3 AM Night", image: '/backgrounds/night.png'},
+  {name: "Golden Hour", image: '/backgrounds/golden.png'}
 ]
 
 export default function StepScene() {
   const {selectedScene, setScene} = useStepStore()
-
-  const handleClick = (scene) => {
-    if(selectedScene === scene){
-      setScene(null);
-    } else {
-      setScene(scene);
-    }
-  }
+  const handleClick = (s) => selectedScene === s ? setScene(null) : setScene(s)
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <h1 className="text-3xl font-bold">Step 5: Choose a Background</h1>
-      <p className="text-gray-500 text-center max-w-md">
-        Select the vibe that fits your dessert scene.
-      </p>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+    <div className="flex flex-col h-full">
+      <h3 className="text-slate-500 font-bold mb-3 text-sm uppercase tracking-wider">Set the Vibe</h3>
+      <div className="grid grid-cols-2 gap-3 pb-4">
         {scenes.map((scene)=> (
-        <OptionCard
-        key = {scene.name}
-        image = {scene.image}
-        label = {scene.name}
-        isSelected={selectedScene === scene.name}
-        onClick={()=>handleClick(scene.name)}
-        />
+          <OptionCard key={scene.name} image={scene.image} label={scene.name} isSelected={selectedScene === scene.name} onClick={()=>handleClick(scene.name)}/>
         ))}
       </div>
-
-      {selectedScene && (
-        <div className="mt-6 text-center text-lg">
-          <strong>Selected Scene:</strong>{selectedScene}
-        </div>
-      )}
     </div>
   )
 }
