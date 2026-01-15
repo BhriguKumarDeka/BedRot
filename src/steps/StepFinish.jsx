@@ -108,7 +108,7 @@ export default function StepFinish() {
       console.log("Native share skip:", err);
     }
 
-    const url = "https://dessert-shop-demo.vercel.app";
+    const url = "https://bedrot.bhrigu.live";
 
     if (platform === 'x') {
       const xText = encodeURIComponent(shareText);
