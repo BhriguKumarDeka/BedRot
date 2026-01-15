@@ -63,15 +63,12 @@ export default function Preview({ id, isFullScreen = false }) {
       if (name === 'Pizza') return 'w-24 md:w-36';
       return 'w-16 md:w-24';
     }
-    return 'w-36 md:w-56'; // Decor default
+
+    // Decorations (Comfort)
+    if (name === 'Squishmallow') return 'w-36 md:w-56'; // Default large size for plushie
+    // Smaller items (Tissues, Headphones, Mask)
+    return 'w-20 md:w-28';
   };
-
-  const scene = selectedScene
-    ? `/backgrounds/${SCENE_MAP[selectedScene] || 'day'}.png`
-    : "/backgrounds/day.png";
-
-  // 🌑 RETRO SHADOW: Small depth for ambient occlusion feel
-  const harshShadow = "drop-shadow-[3px_3px_0px_rgba(0,0,0,0.3)]";
 
   // 📍 FIXED SLOTS (No overlapping)
   // These positions are percentages strictly INSIDE the bed area.
@@ -91,6 +88,9 @@ export default function Preview({ id, isFullScreen = false }) {
     "top-[50%] right-[10%] -rotate-6",      // 4. Middle Right Edge
     "top-[65%] left-[40%] rotate-45",       // 5. Lower Middle
   ];
+
+  const scene = SCENE_MAP[selectedScene] ? `/backgrounds/${SCENE_MAP[selectedScene].toLowerCase()}.png` : "/backgrounds/day.png";
+  const harshShadow = "drop-shadow-[6px_6px_0px_rgba(0,0,0,0.25)]";
 
   return (
     <div

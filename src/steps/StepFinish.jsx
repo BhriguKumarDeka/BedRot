@@ -1,9 +1,41 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import confetti from "canvas-confetti"
 import { toPng } from "html-to-image"
+import { useStepStore } from "../store/stepStore"
 
 export default function StepFinish() {
   const [isDownloading, setIsDownloading] = useState(false);
+  const { selectedBase, selectedFlavors, selectedToppings, selectedDecoration, selectedScene } = useStepStore();
+
+  // Dynamic Score Calculation
+  const stats = useMemo(() => {
+    let comfort = 0;
+    let social = 0;
+    let rotLevel = 0;
+
+    if (selectedBase) comfort += 20;
+    if (selectedScene) comfort += 10;
+    if (selectedDecoration) comfort += 15;
+
+    // Tech increases comfort but kills social
+    comfort += selectedFlavors.length * 10;
+    social -= selectedFlavors.length * 10;
+
+    // Snacks increase rot level
+    rotLevel += selectedToppings.length * 15;
+
+    // Base Calculations
+    const finalComfort = Math.min(100, Math.max(0, 50 + comfort));
+    const finalSocial = Math.min(100, Math.max(0, 50 + social));
+    const finalRot = Math.min(100, Math.max(0, 20 + rotLevel + (selectedBase ? 10 : 0)));
+
+    let title = "NOVICE NAPPER";
+    if (finalRot > 40) title = "WEEKEND WARRIOR";
+    if (finalRot > 70) title = "DECOMPOSITION EXPERT";
+    if (finalRot > 90) title = "ONE WITH THE OOZE";
+
+    return { comfort: finalComfort, social: finalSocial, rot: finalRot, title };
+  }, [selectedBase, selectedFlavors, selectedToppings, selectedDecoration, selectedScene]);
 
   useEffect(() => {
     confetti({
@@ -18,6 +50,17 @@ export default function StepFinish() {
     setIsDownloading(true);
     const element = document.getElementById('game-stage');
 
+    // Create a stat overlay for the screenshot
+    const statOverlay = document.createElement('div');
+    statOverlay.innerHTML = `
+      <div style="position:absolute; bottom:10px; right:10px; background:#e6dac3; border:4px solid #3e2723; padding:10px; font-family:'VT323', monospace; color:#3e2723; z-index:9999; text-align:left; box-shadow:4px 4px 0 rgba(0,0,0,0.5);">
+         <div style="border-bottom:2px solid #3e2723; margin-bottom:4px; font-weight:bold; font-size: 20px;">${stats.title}</div>
+         <div style="font-size: 16px;">ROT LEVEL: ${stats.rot}%</div>
+         <div style="font-size: 16px;">COMFORT: ${stats.comfort}%</div>
+      </div>
+    `;
+    element.appendChild(statOverlay);
+
     try {
       // Wait for fonts/images to be ready
       await new Promise((r) => setTimeout(r, 250));
@@ -29,6 +72,8 @@ export default function StepFinish() {
         backgroundColor: '#2d2a2e'
       });
 
+      element.removeChild(statOverlay);
+
       const link = document.createElement('a');
       link.download = `bed-rot-sim-${Date.now()}.png`;
       link.href = dataUrl;
@@ -37,6 +82,7 @@ export default function StepFinish() {
 
     } catch (err) {
       console.error(err);
+      if (element.contains(statOverlay)) element.removeChild(statOverlay);
       alert("Could not create image :(");
       return null;
     } finally {
@@ -45,9 +91,11 @@ export default function StepFinish() {
   };
 
   const handleShare = async () => {
+    const shareText = `I reached rank "${stats.title}" with ${stats.rot}% Bed Rot Level. 😴\n\nBuild your cozy setup 👇 #BedRotSimulator`;
+
     // If not on mobile/share-capable device, just tweet immediately to avoid double download action
     if (!navigator.share || !navigator.canShare) {
-      const text = encodeURIComponent("I am fully booked this weekend. 😴\n\nGenerated my setup in the Bed Rot Simulator 👇");
+      const text = encodeURIComponent(shareText);
       const url = encodeURIComponent("https://dessert-shop-demo.vercel.app");
 
       // We trigger download first so they have the image
@@ -72,7 +120,7 @@ export default function StepFinish() {
       if (navigator.canShare({ files: [file] })) {
         await navigator.share({
           title: 'Bed Rot Simulator',
-          text: 'My weekend plans are set. #BedRotSimulator',
+          text: shareText,
           files: [file]
         });
       }
@@ -83,7 +131,7 @@ export default function StepFinish() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center gap-4 px-4 overflow-y-auto">
+    <div className="flex flex-col items-center justify-center h-full text-center gap-4 px-4 overflow-y-auto w-full">
       <h2 className="text-3xl w-full text-center mb-4 text-[#ffe0b2] text-outline font-bold tracking-widest">
         MISSION COMPLETE
       </h2>
@@ -94,20 +142,30 @@ export default function StepFinish() {
 
         <p className="border-b border-[#a1887f] pb-2 mb-2 bg-[#d7ccc8] mx-[-1rem] mt-[-1rem] pt-2 font-bold tracking-wider">STATUS REPORT</p>
 
+        <div className="mb-4 text-center">
+          <span className="block text-sm opacity-70">RANK ACHIEVED</span>
+          <span className="text-2xl font-bold text-[#d84315] drop-shadow-sm">{stats.title}</span>
+        </div>
+
+        <div className="flex justify-between items-center mb-2">
+          <span>ROT LEVEL:</span>
+          <div className="w-24 h-4 bg-[#3e2723] p-[2px] relative">
+            <div className="h-full bg-[#8e24aa]" style={{ width: `${stats.rot}%` }}></div>
+          </div>
+        </div>
+
         <div className="flex justify-between items-center mb-2">
           <span>COMFORT:</span>
           <div className="w-24 h-4 bg-[#3e2723] p-[2px]">
-            <div className="w-full h-full bg-[#4caf50]"></div>
+            <div className="h-full bg-[#4caf50]" style={{ width: `${stats.comfort}%` }}></div>
           </div>
         </div>
         <div className="flex justify-between items-center mb-2">
           <span>SOCIAL:</span>
           <div className="w-24 h-4 bg-[#3e2723] p-[2px]">
-            <div className="w-[10%] h-full bg-[#f44336]"></div>
+            <div className="h-full bg-[#f44336]" style={{ width: `${stats.social}%` }}></div>
           </div>
         </div>
-
-        <p className="mt-4 text-sm animate-pulse text-[#d84315]"> SYSTEM DECOMPOSING...</p>
       </div>
 
       <div className="w-full flex flex-col gap-3 mt-4 max-w-xs mx-auto">
