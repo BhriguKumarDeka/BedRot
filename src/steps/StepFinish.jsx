@@ -90,45 +90,51 @@ export default function StepFinish() {
     }
   };
 
-  const handleShare = async () => {
-    const shareText = `I reached rank "${stats.title}" with ${stats.rot}% Bed Rot Level. 😴\n\nBuild your cozy setup 👇 #BedRotSimulator`;
-
-    // If not on mobile/share-capable device, just tweet immediately to avoid double download action
-    if (!navigator.share || !navigator.canShare) {
-      const text = encodeURIComponent(shareText);
-      const url = encodeURIComponent("https://dessert-shop-demo.vercel.app");
-
-      // We trigger download first so they have the image
-      const dataUrl = await handleDownload();
-      if (dataUrl) {
-        setTimeout(() => {
-          alert("Image saved! Please attach it to your tweet manually.");
-          window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-        }, 1000);
-      }
+  const handleSharePlatform = async (platform) => {
+    setIsDownloading(true);
+    // 1. Generate the image first (Always needed for embedding/fallback)
+    const dataUrl = await handleDownload();
+    if (!dataUrl) {
+      setIsDownloading(false);
       return;
     }
 
-    // Try Native Share API
-    const dataUrl = await handleDownload();
-    if (!dataUrl) return;
+    const shareText = `I reached rank "${stats.title}" with ${stats.rot}% Bed Rot Level. 😴\n\nBuild your cozy setup at Bed Rot Simulator 👇 #BedRotSimulator`;
 
+    // 2. Try Native Web Share (Best for Mobile, embeds image directly)
     try {
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], "bed-rot-sim.png", { type: "image/png" });
+      const resp = await fetch(dataUrl);
+      const blob = await resp.blob();
+      const file = new File([blob], 'bed-rot-report.png', { type: 'image/png' });
 
-      if (navigator.canShare({ files: [file] })) {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
+          files: [file],
           title: 'Bed Rot Simulator',
           text: shareText,
-          files: [file]
         });
+        setIsDownloading(false);
+        return;
       }
-    } catch (e) {
-      console.log("Share failed or cancelled", e);
+    } catch (err) {
+      console.log("Native share skip:", err);
     }
-  };
 
+    // 3. Desktop Fallback (Direct Intents)
+    // Note: Desktop browsers cannot "inject" images into X/WA intents via URL.
+    // We've already downloaded the image for them as fallback.
+    const url = "https://dessert-shop-demo.vercel.app";
+
+    if (platform === 'x') {
+      const xText = encodeURIComponent(shareText);
+      const xUrl = encodeURIComponent(url);
+      window.open(`https://twitter.com/intent/tweet?text=${xText}&url=${xUrl}`, '_blank');
+    } else {
+      const waText = encodeURIComponent(`${shareText}\n${url}`);
+      window.open(`https://wa.me/?text=${waText}`, '_blank');
+    }
+    setIsDownloading(false);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-full text-center gap-4 px-4 overflow-y-auto w-full">
@@ -172,18 +178,30 @@ export default function StepFinish() {
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className="rpg-btn w-full py-4 text-xl font-bold flex items-center justify-center gap-2 group"
+          className="rpg-btn w-full py-4 text-xl font-bold flex items-center justify-center gap-2 group bg-[#3e2723] text-[#ffe0b2]"
         >
-          {isDownloading ? "SAVING..." : "💾 SAVE TO DISK"}
+          {isDownloading ? "SAVING..." : "💾 SAVE IMAGE"}
         </button>
 
-        <button
-          onClick={handleShare}
-          className="rpg-btn w-full py-4 text-xl font-bold text-[#fafafa] flex items-center justify-center gap-2 group"
-          style={{ backgroundColor: '#1da1f2' }}
-        >
-          🐦 SHARE UPDATE
-        </button>
+        <div className="grid grid-cols-2 gap-3 w-full">
+          <button
+            onClick={() => handleSharePlatform('x')}
+            disabled={isDownloading}
+            className="rpg-btn py-3 text-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50"
+            style={{ backgroundColor: '#000000' }}
+          >
+            <span className="text-xl">𝕏</span> {isDownloading ? "..." : "SHARE"}
+          </button>
+
+          <button
+            onClick={() => handleSharePlatform('whatsapp')}
+            disabled={isDownloading}
+            className="rpg-btn py-3 text-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50"
+            style={{ backgroundColor: '#25D366' }}
+          >
+            <span className="text-xl">💬</span> {isDownloading ? "..." : "WA"}
+          </button>
+        </div>
       </div>
 
       <button
